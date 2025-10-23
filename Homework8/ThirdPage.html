@@ -12,33 +12,50 @@
 
       input.error {
         border: 2px solid red;
-        background-color: #faaeae;
+        background-color: #ffdddd;
+        color: black;
       }
     </style>
+
     <script>
       function validateForm(event) {
-        // Prevent form from submitting until check
         event.preventDefault();
+
         const first = document.getElementById("fname");
         const last = document.getElementById("lName");
         const email = document.getElementById("email");
-        [first, last, email].forEach(el => el.classList.remove("error"));
+
+        // Reset styles and clear any "required" placeholders if user corrected them
+        [first, last, email].forEach(el => {
+          el.classList.remove("error");
+          if (el.value.trim().toLowerCase() === "required") {
+            el.value = "";
+          }
+        });
+
+        // Function to handle missing field
+        function markRequired(input) {
+          input.classList.add("error");
+          input.value = "Required";
+          input.focus();
+        }
+
         if (first.value.trim() === "") {
-          first.classList.add("error");
-          first.focus();
+          markRequired(first);
           return false;
         }
+
         if (last.value.trim() === "") {
-          last.classList.add("error");
-          last.focus();
+          markRequired(last);
           return false;
         }
+
         if (email.value.trim() === "") {
-          email.classList.add("error");
-          email.focus();
+          markRequired(email);
           return false;
         }
-        // If everything is filled, submit form
+
+        // If everything filled out, submit
         event.target.submit();
       }
     </script>
